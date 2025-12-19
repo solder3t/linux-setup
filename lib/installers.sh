@@ -112,7 +112,10 @@ install_zsh_stack() {
 
   cp -n zsh/.zshrc "$HOME/.zshrc"
   cp -n zsh/.p10k.zsh "$HOME/.p10k.zsh"
-
-  chsh -s "$(command -v zsh)"
-  mark_done zsh
+  
+# Set zsh as default shell
+  if [[ "$SHELL" != "$(command -v zsh)" ]]; then
+    echo "🔐 Setting zsh as default shell"
+    sudo chsh -s "$(command -v zsh)" "$USER"
+  fi
 }
