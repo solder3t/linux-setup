@@ -139,10 +139,20 @@ install_zsh_stack() {
   if [[ -f "$ROOT_DIR/zsh/.p10k.zsh" ]]; then
     cp -n "$ROOT_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
   fi
-  
-# Set zsh as default shell
-  if [[ "$SHELL" != "$(command -v zsh)" ]]; then
-    echo "🔐 Setting zsh as default shell"
-    sudo chsh -s "$(command -v zsh)" "$USER"
+
+# Set zsh as default login shell
+ZSH_PATH="$(command -v zsh)"
+
+# Ensure zsh is a valid login shell
+  if ! grep -qx "$ZSH_PATH" /etc/shells; then
+    echo "➕ Registering zsh in /etc/shells"
+    echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
+  fi
+
+# Change default shell if needed
+  if [[ "$SHELL" != "$ZSH_PATH" ]]; then
+    echo "🔐 Setting zsh as default login shell (requires sudo)"
+    sudo chsh -s "$ZSH_PATH" "$USER"
+    echo "ℹ️ Shell will change after logout/login or reboot"
   fi
 }
