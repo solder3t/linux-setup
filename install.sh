@@ -1,7 +1,32 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-[[ $EUID -eq 0 ]] && { echo "Do not run as root"; exit 1; }
+REPO_URL="https://github.com/solder3t/linux-setup"
+REPO_BRANCH="main"
+REPO_NAME="linux-setup"
+
+# --------------------------------------------------
+# Detect curl | bash execution and bootstrap repo
+# --------------------------------------------------
+if [[ -z "${BASH_SOURCE[0]:-}" || ! -f "${BASH_SOURCE[0]}" ]]; then
+  echo "📦 Running via one-liner, bootstrapping repository..."
+
+  WORKDIR="$(mktemp -d)"
+  cd "$WORKDIR"
+
+  curl -fsSL "$REPO_URL/archive/refs/heads/$REPO_BRANCH.tar.gz" | tar -xz
+  cd "$REPO_NAME-$REPO_BRANCH"
+
+  exec bash ./install.sh
+fi
+
+# --------------------------------------------------
+# Normal execution (cloned repo)
+# --------------------------------------------------
+[[ $EUID -eq 0 ]] && {
+  echo "❌ Do not run as root"
+  exit 1
+}
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STATE_DIR="$HOME/.setup-state"
