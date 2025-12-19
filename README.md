@@ -4,8 +4,6 @@
 - **Fedora**
 - **Ubuntu / Debian-based** (Ubuntu 22.04 / 24.04 tested)
 
----
-
 ## ✨ Features
 
 - 📦 Complete Android **ROM + kernel** build dependencies
@@ -17,8 +15,6 @@
 - 🔌 **adb / fastboot + udev rules**
 - 🐚 **ZSH + Oh-My-Zsh + Powerlevel10k + fastfetch**
 - 🔁 **Idempotent & resumable** (safe to re-run anytime)
-
----
 
 ## 🚀 Quick Start
 
