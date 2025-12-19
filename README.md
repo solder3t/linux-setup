@@ -1,22 +1,33 @@
-✨ Features
+## ✅ Supported Distributions
 
-  📦 Complete Android ROM + kernel build dependencies
-  ⚙️ Correct Java 21, Clang/LLVM, cross-compilers
-  🚀 AOSP clang prebuilts
-  🧠 repo tool (Google’s official)
-  ⚡ ccache preconfigured (50 GB)
-  🔧 ulimit tuning for Soong & Ninja
-  🔌 adb / fastboot + udev rules
-  🐚 ZSH + Oh-My-Zsh + Powerlevel10k + fastfetch
-  🔁 Idempotent & resumable (safe to rerun)
+- **Arch Linux**
+- **Fedora**
+- **Ubuntu / Debian-based** (Ubuntu 22.04 / 24.04 tested)
 
-🚀 Quick Start (One-Click)
+---
 
-  git clone https://github.com/<you>/android-linux-setup.git
-  cd android-linux-setup
-  chmod +x install.sh
-  ./install.sh
+## ✨ Features
 
-Or fully unattended:
+- 📦 Complete Android **ROM + kernel** build dependencies
+- ⚙️ **Java 21**, Clang/LLVM/LLD, GNU cross-compilers
+- 🧠 Google’s official **repo** tool
+- 🚀 **AOSP clang prebuilts**
+- ⚡ **ccache preconfigured (50 GB)**
+- 🔧 **ulimit tuning** for Soong & Ninja
+- 🔌 **adb / fastboot + udev rules**
+- 🐚 **ZSH + Oh-My-Zsh + Powerlevel10k + fastfetch**
+- 🔁 **Idempotent & resumable** (safe to re-run anytime)
 
-  curl -fsSL https://raw.githubusercontent.com/<you>/android-linux-setup/main/install.sh | bash
+---
+
+## 🚀 Quick Start
+
+### Clone & run
+```bash
+git clone https://github.com/<your-username>/android-linux-setup.git
+cd android-linux-setup
+chmod +x install.sh
+./install.sh
+
+One-liner
+curl -fsSL https://raw.githubusercontent.com/<your-username>/android-linux-setup/main/install.sh | bash
