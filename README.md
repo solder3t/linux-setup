@@ -26,4 +26,5 @@ chmod +x install.sh
 ./install.sh
 
 ### One-liner install
+'''bash
 curl -fsSL https://raw.githubusercontent.com/solder3t/linux-setup/main/install.sh | bash
