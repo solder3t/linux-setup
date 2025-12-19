@@ -45,11 +45,18 @@ alias lla='lsd -la'
 alias lt='lsd --tree'
 
 # -------------------------------------------------
-# Fastfetch
-# -------------------------------------------------
-command -v fastfetch >/dev/null && fastfetch
-
-# -------------------------------------------------
 # Powerlevel10k config
 # -------------------------------------------------
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# --------------------------------------------------
+# Post-init console output (safe for p10k)
+# --------------------------------------------------
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd () {
+  # Run once per session
+  if [[ -z "$_FASTFETCH_SHOWN" ]]; then
+    export _FASTFETCH_SHOWN=1
+    command -v fastfetch >/dev/null && fastfetch
+  fi
+}
