@@ -110,8 +110,11 @@ install_zsh_stack() {
   P10K_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
   [[ -d "$P10K_DIR" ]] || git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
 
-  cp -n zsh/.zshrc "$HOME/.zshrc"
-  cp -n zsh/.p10k.zsh "$HOME/.p10k.zsh"
+  cp -n "$ROOT_DIR/zsh/.zshrc" "$HOME/.zshrc"
+  
+  if [[ -f "$ROOT_DIR/zsh/.p10k.zsh" ]]; then
+    cp -n "$ROOT_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
+  fi
   
 # Set zsh as default shell
   if [[ "$SHELL" != "$(command -v zsh)" ]]; then
