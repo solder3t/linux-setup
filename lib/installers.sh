@@ -25,6 +25,21 @@ install_android_build_deps() {
   mark_done android_deps
 }
 
+install_optional_gcc_cross() {
+  [[ "$PM" != "apt" ]] && return
+
+  echo "🔍 Checking availability of GCC cross-compilers"
+
+  if apt-cache show gcc-aarch64-linux-gnu >/dev/null 2>&1 &&
+     apt-cache show gcc-arm-linux-gnueabi >/dev/null 2>&1; then
+    echo "📦 Installing GCC cross-compilers"
+    sudo apt install -y gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi
+  else
+    echo "⚠️ GCC cross-compilers not available on this distro (skipping)"
+    echo "ℹ️ Android builds will use Clang (recommended)"
+  fi
+}
+
 arch_pre_setup() {
   [[ "$PM" != "pacman" ]] && return
   state_done arch_multilib && return
