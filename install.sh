@@ -44,6 +44,7 @@ echo "=================================================="
 detect_distro
 arch_pre_setup
 install_android_build_deps
+install_optional_gcc_cross
 ubuntu_ncurses_compat
 install_android_udev
 install_repo_tool
