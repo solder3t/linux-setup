@@ -1,7 +1,10 @@
+STATE_DIR="$HOME/.setup-state"
+
 state_done() {
-  [[ -f "$HOME/.setup-state/$1" ]]
+  [[ -f "$STATE_DIR/$1" ]]
 }
 
 mark_done() {
-  touch "$HOME/.setup-state/$1"
+  mkdir -p "$STATE_DIR"
+  touch "$STATE_DIR/$1"
 }
