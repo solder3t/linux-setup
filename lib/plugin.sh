@@ -2,7 +2,7 @@ PLUGINS_LOADED=()
 load_plugins() {
   for plugin in "$ROOT_DIR/plugins"/*/*/plugin.sh "$ROOT_DIR/plugins"/*/plugin.sh; do
     [[ -f "$plugin" ]] || continue
-    source "$plugin"
+    # Don't source here, just track the file
     PLUGINS_LOADED+=("$plugin")
   done
 }
@@ -10,7 +10,13 @@ load_plugins() {
 run_plugin_hook() {
   local hook="$1"
   for plugin in "${PLUGINS_LOADED[@]}"; do
-    grep -q "plugin_install()" "$plugin" && plugin_install
+    # Run in subshell to avoid polluting global namespace
+    (
+      source "$plugin"
+      if declare -f "plugin_$hook" >/dev/null; then
+        plugin_"$hook"
+      fi
+    )
   done
 }
 
@@ -21,7 +27,12 @@ run_selected_plugins() {
   for plugin in "${PLUGINS_LOADED[@]}"; do
     for t in "${targets[@]}"; do
       if [[ "$plugin" == *"/$t/"* ]]; then
-        grep -q "plugin_${hook}()" "$plugin" && plugin_${hook}
+        (
+          source "$plugin"
+          if declare -f "plugin_$hook" >/dev/null; then
+            plugin_"$hook"
+          fi
+        )
       fi
     done
   done

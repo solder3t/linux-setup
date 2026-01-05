@@ -6,11 +6,11 @@ _wuthering_choose() {
   local prompt="$1"; shift
   local options=("$@")
   local choice
-  echo
-  echo "$prompt"
+  echo >&2
+  echo "$prompt" >&2
   select choice in "${options[@]}"; do
     [[ -n "$choice" ]] && echo "$choice" && return
-    echo "Invalid choice, try again."
+    echo "Invalid choice, try again." >&2
   done
 }
 
@@ -41,7 +41,7 @@ plugin_install() {
 
   [[ -z "$THEME" ]] && THEME="$(_wuthering_choose 'Select GRUB theme:' "${THEMES[@]}")"
 
-  if [[ -z "$WUTHERING_SCREEN" ]]; then
+  if [[ -z "${WUTHERING_SCREEN:-}" ]]; then
     echo "Detected resolution → suggested: $SCREEN"
     SCREEN="$(_wuthering_choose 'Select screen resolution:' "${SCREENS[@]}")"
   fi
