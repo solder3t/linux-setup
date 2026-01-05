@@ -18,8 +18,8 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$ROOT_DIR/lib/state.sh"
 source "$ROOT_DIR/lib/plugin.sh"
+source "$ROOT_DIR/lib/detect.sh"
 [[ -f "$ROOT_DIR/lib/installers.sh" ]] && source "$ROOT_DIR/lib/installers.sh"
-[[ -f "$ROOT_DIR/lib/detect.sh" ]] && source "$ROOT_DIR/lib/detect.sh"
 
 load_plugins
 
