@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+# Detect the package manager early
+
 detect_pm() {
   if command -v pacman >/dev/null 2>&1; then
     PM="pacman"
@@ -9,9 +12,7 @@ detect_pm() {
     echo "❌ Unsupported package manager"
     exit 1
   fi
-
   export PM
 }
 
-# Run detection immediately
 detect_pm
