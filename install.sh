@@ -17,8 +17,8 @@ fi
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$ROOT_DIR/lib/state.sh"
-source "$ROOT_DIR/lib/plugin.sh"
 source "$ROOT_DIR/lib/detect.sh"
+source "$ROOT_DIR/lib/plugin.sh"
 [[ -f "$ROOT_DIR/lib/installers.sh" ]] && source "$ROOT_DIR/lib/installers.sh"
 
 load_plugins
@@ -27,8 +27,22 @@ CMD="${1:-install}"
 shift || true
 
 case "$CMD" in
-  install)   run_plugin_hook install ;;
-  uninstall) run_plugin_hook uninstall ;;
-  plugins)   echo "Available plugins:"; run_plugin_hook describe ;;
-  *) echo "Usage: linux-setup [install|uninstall|plugins]" ;;
+  install)
+    if [[ $# -gt 0 ]]; then
+      run_selected_plugins install "$@"
+    else
+      run_default_profile
+    fi
+    ;;
+  uninstall)
+    run_selected_plugins uninstall "$@"
+    ;;
+  plugins)
+    echo "Available plugins:"
+    run_plugin_hook describe
+    ;;
+  *)
+    echo "Usage: linux-setup [install|uninstall|plugins]"
+    ;;
 esac
+
