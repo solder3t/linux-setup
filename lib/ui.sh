@@ -25,6 +25,7 @@ ui_select_plugins() {
   for plugin in "${PLUGINS_LOADED[@]}"; do
     plugin_name="$(basename "$(dirname "$plugin")")"
     
+    
     desc=$(
       source "$plugin"
       if declare -f plugin_describe >/dev/null; then
@@ -33,7 +34,19 @@ ui_select_plugins() {
         echo "$plugin_name"
       fi
     )
+    
+    # Clean description: remove newlines and tabs
     desc="${desc//[$'\t\r\n']/ }"
+    
+    # Remove "pluginname -" prefix if present (case insensitive-ish)
+    # e.g. "neovim - Text editor" -> "Text editor"
+    # We use a regex match or simple substitution
+    if [[ "$desc" == "$plugin_name - "* ]]; then
+        desc="${desc#"$plugin_name - "}"
+    elif [[ "$desc" == "$plugin_name "* ]]; then
+        desc="${desc#"$plugin_name "}"
+    fi
+
     desc="${desc%%  *}"
     
     # Store as "name|desc" for sorting
