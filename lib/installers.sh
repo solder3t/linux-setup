@@ -67,19 +67,29 @@ setup_aur_helper() {
 
   case "$choice" in
     1)
-      echo "📦 Installing yay..."
-      sudo pacman -S --needed --noconfirm git base-devel
-      git clone https://aur.archlinux.org/yay.git /tmp/yay
-      (cd /tmp/yay && makepkg -si --noconfirm)
-      rm -rf /tmp/yay
+      if [[ -f "$ROOT_DIR/plugins/tools/yay/plugin.sh" ]]; then
+          echo "📦 Installing yay via plugin..."
+          (source "$ROOT_DIR/plugins/tools/yay/plugin.sh" && plugin_install)
+      else
+          echo "❌ Plugin not found! Falling back to manual install."
+          sudo pacman -S --needed --noconfirm git base-devel
+          git clone https://aur.archlinux.org/yay.git /tmp/yay
+          (cd /tmp/yay && makepkg -si --noconfirm)
+          rm -rf /tmp/yay
+      fi
       AUR_HELPER="yay"
       ;;
     2)
-      echo "📦 Installing paru..."
-      sudo pacman -S --needed --noconfirm git base-devel
-      git clone https://aur.archlinux.org/paru.git /tmp/paru
-      (cd /tmp/paru && makepkg -si --noconfirm)
-      rm -rf /tmp/paru
+      if [[ -f "$ROOT_DIR/plugins/tools/paru/plugin.sh" ]]; then
+          echo "📦 Installing paru via plugin..."
+          (source "$ROOT_DIR/plugins/tools/paru/plugin.sh" && plugin_install)
+      else
+          echo "❌ Plugin not found! Falling back to manual install."
+          sudo pacman -S --needed --noconfirm git base-devel
+          git clone https://aur.archlinux.org/paru.git /tmp/paru
+          (cd /tmp/paru && makepkg -si --noconfirm)
+          rm -rf /tmp/paru
+      fi
       AUR_HELPER="paru"
       ;;
     *)

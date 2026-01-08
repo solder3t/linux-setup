@@ -11,10 +11,18 @@ plugin_install() {
     pacman) sudo pacman -S --needed --noconfirm fastfetch ;;
     dnf)    sudo dnf install -y fastfetch ;;
     apt)    
-        # Available in newer Ubuntu/Debian versions.
-        # If not, users might need PPA or manual install, but we'll try apt first.
-        # Fallback to direct binary could be an option but let's stick to package manager for now.
-        sudo apt install -y fastfetch || echo "⚠️ fastfetch might not be in your apt repos (needs Ubuntu 24.10+ or PPA)"
+        # Available in newer Ubuntu/Debian versions (24.10+).
+        # For older versions (22.04), we need a PPA.
+        if ! apt-cache show fastfetch >/dev/null 2>&1; then
+             echo "⚠️ fastfetch not found in default repos. Adding PPA..."
+             if ! command -v add-apt-repository >/dev/null 2>&1; then
+                 sudo apt install -y software-properties-common
+             fi
+             sudo add-apt-repository -y ppa:zhangsongcui3336/fastfetch
+             sudo apt update
+        fi
+        
+        sudo apt install -y fastfetch
         ;;
   esac
 }

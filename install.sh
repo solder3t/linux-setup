@@ -62,6 +62,9 @@ case "$CMD" in
         done
         echo
         echo "ℹ️  You may need to log out and back in for some changes to take effect."
+        
+        # Cleanup state directory
+        state_cleanup
     fi
     ;;
   uninstall)

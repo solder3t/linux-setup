@@ -12,9 +12,18 @@ plugin_install() {
     dnf)    sudo dnf install -y neovim ;;
     apt)    
         # Check for glibc version or ubuntu version, as older ones have very old nvim.
-        # But for simplicity in this setup, we'll install standard repo version or snap if requested, 
-        # but pure package manager is safer for consistency.
-        # Ideally, we add ppa:neovim-ppa/unstable or stable, but let's stick to default first to avoid external repo complexity unless needed.
+        # Use Unstable PPA for valid recent neovim
+        if ! command -v add-apt-repository >/dev/null 2>&1; then
+             sudo apt install -y software-properties-common
+        fi
+        
+        # Only add if not present
+        if ! grep -q "neovim-ppa/unstable" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+            echo "ℹ️ Adding Neovim PPA (Unstable) for recent version..."
+            sudo add-apt-repository -y ppa:neovim-ppa/unstable
+            sudo apt update
+        fi
+        
         sudo apt install -y neovim 
         ;;
   esac

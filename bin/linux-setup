@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-set -e
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-exec bash "$ROOT_DIR/install.sh" "$@"
+set -euo pipefail
+
+# bin/linux-setup - Shim to run the installer from the bin directory
+
+# Resolve physical directory of this script to find the root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd -P)"
+
+# Hand off execution to the main installer
+exec bash "${ROOT_DIR}/install.sh" "$@"
