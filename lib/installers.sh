@@ -38,6 +38,47 @@ install_android_build_deps() {
   mark_done android_deps
 }
 
+install_packages() {
+  local state_key="$1"
+  shift
+  local packages="$@"
+
+  state_done "$state_key" && {
+    echo "⏭ Package group '$state_key' already installed"
+    return
+  }
+
+  echo "📦 Installing packages for '$state_key'"
+
+  case "$PM" in
+    pacman)
+      if sudo pacman -Sy --needed --noconfirm $packages; then
+        echo "✅ Installed packages via pacman"
+      else
+        echo "⚠️ Some packages failed to install with pacman."
+        setup_aur_helper
+        if [[ -n "$AUR_HELPER" ]]; then
+          echo "🔄 Retrying with $AUR_HELPER..."
+          $AUR_HELPER -Sy --needed --noconfirm $packages
+        else
+          echo "❌ Failed to install required packages and no AUR helper available."
+          return 1
+        fi
+      fi
+      ;;
+    dnf)
+      sudo dnf install -y --setopt=install_weak_deps=False \
+        --skip-unavailable $packages
+      ;;
+    apt)
+      sudo apt update
+      sudo apt install -y --no-install-recommends $packages
+      ;;
+  esac
+
+  mark_done "$state_key"
+}
+
 install_optional_gcc_cross() {
   [[ "$PM" != "apt" ]] && return
 
