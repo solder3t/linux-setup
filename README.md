@@ -15,6 +15,11 @@
 - 🔧 **ulimit tuning** for Soong & Ninja
 - 🔌 **adb / fastboot + udev rules**
 - 🐚 **ZSH + Oh-My-Zsh + Powerlevel10k + fastfetch**
+- 🚀 **Modern CLI Tools**:
+  - **Editors**: Neovim
+  - **Terminals**: Alacritty (w/ Config), Kitty (w/ Config)
+  - **Utils**: fzf, ripgrep, bat, zoxide, tldr, btop/htop, tmux
+  - **Productivity**: lazygit, delta, fd, ncdu, jq, eza, yazi, direnv, duf
 - 🔁 **Idempotent & resumable** (safe to re-run anytime)
 
 ## 🚀 Quick Start

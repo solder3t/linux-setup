@@ -38,11 +38,49 @@ source $ZSH/oh-my-zsh.sh
 # -------------------------------------------------
 # Icons & aliases
 # -------------------------------------------------
-alias ls='lsd'
-alias ll='lsd -l'
-alias la='lsd -a'
-alias lla='lsd -la'
-alias lt='lsd --tree'
+# -------------------------------------------------
+# Icons & aliases
+# -------------------------------------------------
+
+# ls replacement (eza > lsd > ls)
+if command -v eza >/dev/null; then
+  alias ls='eza --icons'
+  alias ll='eza --icons -l'
+  alias la='eza --icons -la'
+  alias lt='eza --icons --tree'
+elif command -v lsd >/dev/null; then
+  alias ls='lsd'
+  alias ll='lsd -l'
+  alias la='lsd -a'
+  alias lla='lsd -la'
+  alias lt='lsd --tree'
+else
+  alias ll='ls -l'
+  alias la='ls -a'
+fi
+
+# cat -> bat
+if command -v bat >/dev/null; then
+  alias cat='bat --style=plain'
+  alias catt='bat' # with header/grid
+fi
+
+# vim -> nvim
+if command -v nvim >/dev/null; then
+  alias vim='nvim'
+  alias vi='nvim'
+fi
+
+# df -> duf
+command -v duf >/dev/null && alias df='duf'
+
+# lazygit
+command -v lazygit >/dev/null && alias lg='lazygit'
+
+# zoxide (z / zi)
+if command -v zoxide >/dev/null; then
+  eval "$(zoxide init zsh)"
+fi
 
 # -------------------------------------------------
 # Powerlevel10k config
