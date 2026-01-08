@@ -9,8 +9,20 @@ install_android_build_deps() {
 
   case "$PM" in
     pacman)
-      # --needed prevents reinstalling already installed packages
-      sudo pacman -Sy --needed --noconfirm $(android_packages)
+      # Try with pacman first
+      if sudo pacman -Sy --needed --noconfirm $(android_packages); then
+        echo "✅ Installed all packages via pacman"
+      else
+        echo "⚠️ Some packages failed to install with pacman."
+        setup_aur_helper
+        if [[ -n "$AUR_HELPER" ]]; then
+          echo "🔄 Retrying with $AUR_HELPER..."
+          $AUR_HELPER -Sy --needed --noconfirm $(android_packages)
+        else
+          echo "❌ Failed to install required packages and no AUR helper available."
+          exit 1
+        fi
+      fi
       ;;
     dnf)
       # dnf already skips installed packages, but avoid unnecessary upgrades
@@ -39,6 +51,42 @@ install_optional_gcc_cross() {
     echo "⚠️ GCC cross-compilers not available on this distro (skipping)"
     echo "ℹ️ Android builds will use Clang (recommended)"
   fi
+}
+
+setup_aur_helper() {
+  [[ "$PM" != "pacman" ]] && return
+  [[ -n "$AUR_HELPER" ]] && return
+
+  echo "⚠️ No AUR helper detected (yay or paru)."
+  echo "AUR helper is recommended for installing legacy dependencies (like ncurses5-compat-libs)."
+  echo "Choose an AUR helper to install:"
+  echo "1) yay (recommended)"
+  echo "2) paru"
+  echo "3) Skip (install only official Repo packages)"
+  read -r -p "Select [1-3]: " choice
+
+  case "$choice" in
+    1)
+      echo "📦 Installing yay..."
+      sudo pacman -S --needed --noconfirm git base-devel
+      git clone https://aur.archlinux.org/yay.git /tmp/yay
+      (cd /tmp/yay && makepkg -si --noconfirm)
+      rm -rf /tmp/yay
+      AUR_HELPER="yay"
+      ;;
+    2)
+      echo "📦 Installing paru..."
+      sudo pacman -S --needed --noconfirm git base-devel
+      git clone https://aur.archlinux.org/paru.git /tmp/paru
+      (cd /tmp/paru && makepkg -si --noconfirm)
+      rm -rf /tmp/paru
+      AUR_HELPER="paru"
+      ;;
+    *)
+      echo "⏭ Skipping AUR helper installation."
+      ;;
+  esac
+  export AUR_HELPER
 }
 
 arch_pre_setup() {
