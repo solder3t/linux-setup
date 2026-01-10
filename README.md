@@ -27,13 +27,13 @@
 ### One-liner (Interactive)
 Run this command to start the interactive installer:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/solder3t/linux_setup/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/solder3t/linux-setup/main/install.sh | bash
 ```
 
 ### Manual Install
 ```bash
-git clone https://github.com/solder3t/linux_setup.git
-cd linux_setup
+git clone https://github.com/solder3t/linux-setup.git
+cd linux-setup
 chmod +x install.sh
 ./install.sh           # Interactive mode
 ./install.sh android   # Headless mode (install specific plugins)
