@@ -1,7 +1,7 @@
 ## ✅ Supported Distributions
 
 - **Arch Linux**
-- **Fedora**
+- **Fedora** (Fedora 43 tested)
 - **Ubuntu / Debian-based** (Ubuntu 22.04 / 24.04 tested)
 
 ## ✨ Features
