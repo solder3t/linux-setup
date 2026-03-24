@@ -1,0 +1,154 @@
+//   _____ _____ _____ _____ _____ _____ _____ _____ _____ 
+//  |   __|  _  |   __|_   _|   __|   __|_   _|     |  |  |
+//  |   __|     |__   | | | |   __|   __| | | |   --|     |
+//  |__|  |__|__|_____| |_| |__|  |_____| |_| |_____|__|__|
+//
+
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "source": "arch",
+        "color": {
+            "1": "cyan",
+            "2": "light_blue"
+        },
+        "padding": {
+            "top": 2,
+            "right": 6
+        }
+    },
+    "display": {
+        "separator": " : ",
+        "bar": {
+            "char": {
+                "elapsed": "■",
+                "total": " "
+            },
+            "width": 12
+        }
+    },
+    "modules": [
+        {
+            "type": "title",
+            "format": " {1}@{2} ",
+            "color": {
+                "user": "magenta",
+                "at": "white",
+                "host": "blue"
+            }
+        },
+        {
+            "type": "custom",
+            "format": "┌───────────────────────Hardware──────────────────────┐"
+        },
+        {
+            "type": "host",
+            "key": " 󰌢 PC",
+            "keyColor": "magenta",
+            "format": "{2} {1}"
+        },
+        {
+            "type": "cpu",
+            "key": " ├─󰻠",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "gpu",
+            "key": " ├─󰍛",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "memory",
+            "key": " ├─󰑭",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "zram",
+            "key": " ├─󰓡",
+            "keyColor": "magenta",
+            "format": "{1} / {2} ({3})"
+        },
+        {
+            "type": "swap",
+            "key": " ├─󰓡",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "disk",
+            "key": " ├─󰋊",
+            "keyColor": "magenta",
+            "format": "{1} / {2} ({3}) {9}"
+        },
+        {
+            "type": "display",
+            "key": " └─󰍹",
+            "keyColor": "magenta",
+            "compactType": "original-with-refresh-rate"
+        },
+        {
+            "type": "custom",
+            "format": "├───────────────────────Software──────────────────────┤"
+        },
+        {
+            "type": "os",
+            "key": " 󰣇 OS",
+            "keyColor": "cyan"
+        },
+        {
+            "type": "kernel",
+            "key": " ├─󰒓",
+            "keyColor": "cyan",
+            "format": "{2} ({4})" // Shows specific CachyOS kernel version and architecture
+        },
+        {
+            "type": "packages",
+            "key": " ├─󰏖",
+            "keyColor": "cyan"
+        },
+        {
+            "type": "shell",
+            "key": " └─󱆃",
+            "keyColor": "cyan"
+        },
+        "break",
+        {
+            "type": "de",
+            "key": " 󰖲 DE",
+            "keyColor": "blue"
+        },
+        {
+            "type": "wm",
+            "key": " ├─󱂬",
+            "keyColor": "blue"
+        },
+        {
+            "type": "theme",
+            "key": " ├─󰉼",
+            "keyColor": "blue"
+        },
+        {
+            "type": "icons",
+            "key": " └─󰀻",
+            "keyColor": "blue"
+        },
+        {
+            "type": "custom",
+            "format": "├─────────────────────OS / Uptime─────────────────────┤"
+        },
+        {
+            "type": "uptime",
+            "key": " Uptime ",
+            "keyColor": "red"
+        },
+        {
+            "type": "custom",
+            "format": "└─────────────────────────────────────────────────────┘"
+        },
+        "break",
+        {
+            "type": "colors",
+            "symbol": "circle",
+            "paddingLeft": 12
+        }
+    ]
+}

@@ -1,0 +1,116 @@
+#
+#       ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗████████╗██╗   ██╗
+#      ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝╚══██╔══╝╚██╗ ██╔╝
+#      ██║  ███╗███████║██║   ██║███████╗   ██║      ██║    ╚████╔╝
+#      ██║   ██║██╔══██║██║   ██║╚════██║   ██║      ██║     ╚██╔╝
+#      ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║      ██║      ██║
+#       ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝      ╚═╝      ╚═╝
+#
+#                      Ghostty Terminal Config 👻
+#
+
+#   ~/.config/ghostty/config
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+#
+# Ghostty can reload the configuration while running by using the menu
+# options or the bound key (default: Command + Shift + comma on macOS and
+# Control + Shift + comma on other platforms). Not all config options can be
+# reloaded while running; some only apply to new windows and others may require
+# a full restart to take effect.
+
+# --------- Config ---------
+# ==========================
+# --- Window Settings ---
+window-width = 146
+window-height = 34
+window-padding-x = 2
+window-padding-y = 2
+
+resize-overlay = always
+resize-overlay-position = top-left
+window-new-tab-position = end
+window-padding-balance = true
+window-step-resize = true
+window-save-state = always
+window-theme = ghostty
+window-decoration = server
+
+# --- Transparency and Blur ---
+background-opacity = 0.8
+background-blur = 25
+
+# --- Colors & Theme ---
+background = #000000
+foreground = #ffffff
+selection-background = #1a1a2e
+selection-foreground = #b2bec3
+bold-color = bright
+
+palette = 0=#3b4252
+palette = 1=#bf616a
+palette = 2=#a3be8c
+palette = 3=#ebcb8b
+palette = 4=#81a1c1
+palette = 5=#b48ead
+palette = 6=#88c0d0
+palette = 7=#e5e9f0
+palette = 8=#4c566a
+palette = 9=#bf616a
+palette = 10=#a3be8c
+palette = 11=#ebcb8b
+palette = 12=#81a1c1
+palette = 13=#b48ead
+palette = 14=#8fbcbb
+palette = 15=#eceff4
+
+# --- Font ---
+font-family = "MesloLGL Nerd Font"
+font-size = 12
+
+# --- Clipboard ---
+clipboard-read = allow
+clipboard-write = allow
+
+# --- Cursor & Mouse ---
+cursor-style = underline
+mouse-hide-while-typing = true
+
+# --- Keybindings ---
+# Copy/Paste Binds
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+
+# Tabs Binds
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+shift+right=next_tab
+keybind = ctrl+shift+left=previous_tab
+keybind = ctrl+shift+w=close_tab
+keybind = super+w=close_window
+
+# Split Binds
+keybind = ctrl+shift+d=new_split:right
+keybind = ctrl+shift+down=new_split:down
+keybind = ctrl+left=goto_split:left
+keybind = ctrl+right=goto_split:right
+keybind = ctrl+up=goto_split:up
+keybind = ctrl+down=goto_split:down
+
+# Font Size Binds
+keybind = ctrl+plus=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+0=reset_font_size
+
+# --- Typography Tweaks ---
+# Adds breathing room between lines
+adjust-cell-height = 5%
+font-feature = +calt,+liga
+
+# --- Updates ---
+auto-update = download
+auto-update-channel = stable

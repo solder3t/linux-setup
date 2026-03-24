@@ -39,9 +39,10 @@
     },
     "break",
     {
-      "type": "de",
+      "type": "command",
       "key": "DE   ",
       "keyColor": "32",
+      "text": "echo \"COSMIC $(pacman -Q cosmic-session 2>/dev/null | awk '{print $2}' | cut -d'-' -f1)\""
     },
     {
       "type": "wm",

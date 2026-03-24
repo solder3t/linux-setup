@@ -54,10 +54,7 @@ plugin_install() {
   # ── Install Config ──
   local PLUGIN_DIR
   PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  local CONFIG_SRC="$ROOT_DIR/ghostty/config"
-
-  # Fallback: check plugin directory too
-  [[ ! -f "$CONFIG_SRC" ]] && CONFIG_SRC="$PLUGIN_DIR/config"
+  local CONFIG_SRC="$PLUGIN_DIR/config"
 
   if [[ -f "$CONFIG_SRC" ]]; then
     printf "%b\n" "${CYAN}📝 Installing ghostty config${RC}"
