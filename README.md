@@ -1,6 +1,6 @@
 # 🐧 Linux-Setup
 
-> **One-command development environment bootstrap** for Arch, Fedora, Ubuntu/Debian, and more.
+> **One-command development environment bootstrap** for Arch, Fedora and Ubuntu/Debian. ***I made this For Personal Use.***
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Shell](https://img.shields.io/badge/Shell-Bash-green.svg)](https://www.gnu.org/software/bash/)
