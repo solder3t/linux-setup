@@ -8,23 +8,23 @@ plugin_install() {
 
   echo "📦 Installing neovim..."
   case "$PM" in
-    pacman) sudo pacman -S --needed --noconfirm neovim ;;
-    dnf)    sudo dnf install -y neovim ;;
-    apt)    
+    pacman) $ESCALATION_TOOL $PM -S --needed --noconfirm neovim ;;
+    dnf)    $ESCALATION_TOOL dnf install -y neovim ;;
+    apt-get|nala)    
         # Check for glibc version or ubuntu version, as older ones have very old nvim.
         # Use Unstable PPA for valid recent neovim
         if ! command -v add-apt-repository >/dev/null 2>&1; then
-             sudo apt install -y software-properties-common
+             $ESCALATION_TOOL apt-get install -y software-properties-common
         fi
         
         # Only add if not present
         if ! grep -q "neovim-ppa/unstable" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
             echo "ℹ️ Adding Neovim PPA (Unstable) for recent version..."
-            sudo add-apt-repository -y ppa:neovim-ppa/unstable
-            sudo apt update
+            $ESCALATION_TOOL add-apt-repository -y ppa:neovim-ppa/unstable
+            $ESCALATION_TOOL apt-get update
         fi
         
-        sudo apt install -y neovim 
+        $ESCALATION_TOOL apt-get install -y neovim 
         ;;
   esac
 }

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# state.sh - Simple state management to avoid re-running tasks
+# state.sh — Simple state management to avoid re-running tasks
 
-# Directory to store state flags
 STATE_DIR="${HOME}/.setup-state"
 mkdir -p "$STATE_DIR"
 
@@ -17,7 +16,13 @@ mark_done() {
   touch "${STATE_DIR}/${task_name}"
 }
 
-# Cleanup state directory (called on success)
+# Reset a specific task
+state_reset() {
+  local task_name="$1"
+  rm -f "${STATE_DIR}/${task_name}"
+}
+
+# Cleanup entire state directory (called on success)
 state_cleanup() {
   if [[ -d "$STATE_DIR" ]]; then
     rm -rf "$STATE_DIR"

@@ -50,7 +50,7 @@ plugin_install() {
   git clone --depth=1 https://github.com/vinceliuice/Wuthering-grub2-themes.git "$TMPDIR"
   BOOT_FLAG="$(_detect_grub_boot_flag)"
   cd "$TMPDIR"
-  sudo bash install.sh --theme "$THEME" --screen "$SCREEN" $BOOT_FLAG
+  $ESCALATION_TOOL bash install.sh --theme "$THEME" --screen "$SCREEN" $BOOT_FLAG
   rm -rf "$TMPDIR"
 }
 
@@ -61,6 +61,6 @@ plugin_uninstall() {
   TMPDIR="$(mktemp -d)"
   git clone --depth=1 https://github.com/vinceliuice/Wuthering-grub2-themes.git "$TMPDIR"
   cd "$TMPDIR"
-  sudo bash install.sh --remove --theme "$THEME"
+  $ESCALATION_TOOL bash install.sh --remove --theme "$THEME"
   rm -rf "$TMPDIR"
 }

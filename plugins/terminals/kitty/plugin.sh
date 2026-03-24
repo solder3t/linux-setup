@@ -4,9 +4,9 @@ plugin_install() {
   if ! command -v kitty >/dev/null 2>&1; then
     echo "📦 Installing kitty..."
     case "$PM" in
-      pacman) sudo pacman -S --needed --noconfirm kitty ;;
-      dnf)    sudo dnf install -y kitty ;;
-      apt)    sudo apt install -y kitty ;;
+      pacman) $ESCALATION_TOOL $PM -S --needed --noconfirm kitty ;;
+      dnf)    $ESCALATION_TOOL dnf install -y kitty ;;
+      apt-get|nala)    $ESCALATION_TOOL apt-get install -y kitty ;;
     esac
   else
     echo "✅ kitty is already installed"
