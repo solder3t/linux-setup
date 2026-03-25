@@ -148,7 +148,7 @@ ui_select_plugins() {
       # Handle Install
       if [[ "$choice" == "INSTALL" ]]; then
           if [[ $count -eq 0 ]]; then
-             whiptail --title " Warning " --msgbox "No plugins selected!" 8 40 >&2
+             whiptail --title " Warning " --msgbox "No plugins selected!" 8 40 3>&1 1>&2 2>&3
              continue
           fi
 
@@ -164,7 +164,7 @@ ui_select_plugins() {
           local box_h=$(( count + 12 ))
           if (( box_h > 22 )); then box_h=22; fi
 
-          if whiptail --title " Confirm Installation " --yesno "$confirm_text" "$box_h" 60 >&2; then
+          if whiptail --title " Confirm Installation " --yesno "$confirm_text" "$box_h" 60 3>&1 1>&2 2>&3; then
               break
           else
               continue
@@ -186,7 +186,7 @@ ui_select_plugins() {
           sub_options+=("$p_name" "$desc" "$stat")
       done
 
-      local sub_choices
+      local sub_choices sub_exit=0
       sub_choices=$(whiptail \
         --title " ${selected_cat} " \
         --ok-button "Save & Back" \
@@ -194,9 +194,9 @@ ui_select_plugins() {
         --checklist "\nSpace to toggle, Enter to save. Esc to discard changes.\n" \
         22 76 12 \
         "${sub_options[@]}" \
-        3>&1 1>&2 2>&3)
+        3>&1 1>&2 2>&3) || sub_exit=$?
 
-      if [[ $? -eq 0 ]]; then
+      if [[ $sub_exit -eq 0 ]]; then
           # Reset this category
           for p in "${plugins_in_cat[@]}"; do
              PLUGIN_STATE[$p]="OFF"
@@ -224,7 +224,7 @@ ui_select_plugins() {
 
           if [[ $total_sel -gt 0 ]]; then
              if [[ $new_in_cat -eq 0 && ${#arr[@]} -eq 0 ]]; then
-                 whiptail --title " Info " --msgbox "Note: You must press [Space] to select an item before pressing [Enter].\n\nYou haven't added any new packages from this category, but you still have $total_sel package(s) selected overall." 10 60 >&2
+                 whiptail --title " Info " --msgbox "Note: You must press [Space] to select an item before pressing [Enter].\n\nYou haven't added any new packages from this category, but you still have $total_sel package(s) selected overall." 10 60 3>&1 1>&2 2>&3
              else
                  local prompt_msg="You have $total_sel package(s) currently selected:\n\n"
                  for p in "${!PLUGIN_STATE[@]}"; do
@@ -237,12 +237,14 @@ ui_select_plugins() {
                  local box_h=$(( total_sel + 12 ))
                  if (( box_h > 22 )); then box_h=22; fi
 
-                 if whiptail --title " Install Now? " --yes-button "Install" --no-button "Browse More" --yesno "$prompt_msg" "$box_h" 60 >&2; then
+                 if whiptail --title " Install Now? " --yes-button "Install" --no-button "Browse More" --yesno "$prompt_msg" "$box_h" 60 3>&1 1>&2 2>&3; then
                      break
+                 else
+                     continue
                  fi
              fi
           else
-             whiptail --title " Info " --msgbox "No packages selected.\n\nTip: You must press [Space] to select an item before pressing [Enter]." 10 60 >&2
+             whiptail --title " Info " --msgbox "No packages selected.\n\nTip: You must press [Space] to select an item before pressing [Enter]." 10 60 3>&1 1>&2 2>&3
           fi
       fi
       # Cancel in sub-menu → back to main (no state change)
