@@ -12,8 +12,8 @@
 
 | Distribution | Package Manager | Tested |
 |---|---|---|
-| **Arch Linux** | `pacman` + AUR (`yay`/`paru`) | ✅ |
-| **Fedora** | `dnf` | ✅ Fedora 43 |
+| **Arch Linux** | `pacman` + AUR (`yay`/`paru`) | ✅ Arch|
+| **Fedora** | `dnf` | ✅ Fedora 43|
 | **Ubuntu / Debian** | `apt-get` / `nala` | ✅ 22.04 / 24.04 / 25.10|
 
 > Privilege escalation automatically detects `sudo`.
