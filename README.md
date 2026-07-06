@@ -20,7 +20,7 @@
 
 ## ✨ Features
 
-- 🔮 **Interactive TUI** — Select exactly what you want to install (whiptail-based)
+- 🔮 **Interactive TUI** — Search, filter, and preview plugin scripts before installing using a rich `fzf`-based interface with checkbox status and live source preview.
 - 🧩 **Plugin Architecture** — 48 self-contained plugins across 12 categories
 - 🔍 **Smart Detection** — Auto-detects distro, architecture, package manager, escalation tool, init system
 - 🏗️ **Chaotic AUR** — One-click setup for Arch-based distros
@@ -47,18 +47,44 @@
 curl -fsSL https://solder3t.github.io/linsetup | bash
 ```
 
-### Manual Install
+### Manual Install & CLI Options
 
 ```bash
 git clone https://github.com/solder3t/linux-setup.git
 cd linux-setup
 chmod +x install.sh
-./install.sh                     # Interactive TUI mode
-./install.sh install android zsh # Headless: install specific plugins
-./install.sh plugins             # List all available plugins
-./install.sh --help              # Show help
-./install.sh --version           # Show version
+
+# Interactive TUI mode (fuzzy search, preview code with fzf)
+./install.sh
+
+# Direct installation (headless mode)
+./install.sh install android zsh
+
+# List all available plugins, description, and host compatibility in a neat table
+./install.sh list
+
+# Automated config-driven setup using a JSON file:
+./install.sh -y -c my_config.json
+
+# Uninstall specific plugins
+./install.sh uninstall chrome floop
 ```
+
+### JSON Configuration Format
+
+You can automate installations by creating a `config.json` file:
+
+```json
+{
+  "auto_execute": [
+    "zsh",
+    "fastfetch",
+    "neovim"
+  ],
+  "skip_confirmation": true
+}
+```
+
 
 ## 🏗️ Architecture
 
