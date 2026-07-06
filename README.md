@@ -146,16 +146,13 @@ plugin_install() {
 
 ## 🙏 Acknowledgments
 
-This project's environment detection, privilege escalation, and package manager abstraction patterns are inspired by and adapted from:
+This project's environment detection, privilege escalation, package manager abstraction patterns, fzf-based sidebar preview concept, and system setup scripts are inspired by and adapted from:
 
 - **[ChrisTitusTech/linutil](https://github.com/ChrisTitusTech/linutil)** — Chris Titus Tech's Linux Toolbox (MIT License)
-  - Distro detection via `/etc/os-release` (`checkDistro`)
-  - Escalation tool detection — `sudo`/`doas` (`checkEscalationTool`)
-  - Architecture detection (`checkArch`)
-  - Superuser group verification (`checkSuperUser`)
-  - Multi-PM support pattern (`checkPackageManager`)
-  - AUR helper auto-install (`checkAURHelper`)
-  - Init system detection (`checkInitManager`)
+  - Distro, privilege escalation, package manager, and architecture detection patterns.
+  - Interactive TUI concept with sidebar description and source code preview.
+  - Core scripts in the `System Setup` category, including CachyOS Repos, DNF Tuning, RPM Fusion setup, Multimedia Codecs, SSD TRIM timer, Snapd removal, Timeshift backup interface, Samba/SSH server setups, and overall system cleanup.
+  - AUR helper auto-installation logic.
 
 ## 📄 License
 
