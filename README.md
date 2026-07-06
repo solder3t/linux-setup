@@ -21,11 +21,13 @@
 ## ✨ Features
 
 - 🔮 **Interactive TUI** — Search, filter, and preview plugin scripts before installing using a rich `fzf`-based interface with checkbox status and live source preview.
-- 🧩 **Plugin Architecture** — 48 self-contained plugins across 12 categories
+- 🧩 **Plugin Architecture** — 57 self-contained plugins across 14 categories
 - 🔍 **Smart Detection** — Auto-detects distro, architecture, package manager, escalation tool, init system
+- 🛡️ **Package Resilience** — Dynamically filters and skips missing/unavailable repository packages to prevent installer crashes
 - 🏗️ **Chaotic AUR** — One-click setup for Arch-based distros
+- 🛠️ **System Setup & Maintenance** — Ported `linutil` configurations (CachyOS Repos, DNF Tuning, RPM Fusion, Multimedia Codecs, SSD TRIM, Snapd removal, Timeshift, Samba/SSH, system cleanup)
 - 📦 Complete Android **ROM + kernel** build dependencies
-- ⚙️ **Java 21**, Clang/LLVM/LLD, GNU cross-compilers
+- ⚙️ **Java JDK** (distro-agnostic version resolution), Clang/LLVM/LLD, GNU cross-compilers
 - 🧠 Google's official **repo** tool
 - 🚀 **AOSP clang prebuilts**
 - ⚡ **ccache preconfigured (50 GB)**
