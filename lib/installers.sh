@@ -20,7 +20,7 @@ filter_available_packages() {
         apt-cache show "$pkg" >/dev/null 2>&1 && available=0
         ;;
       dnf)
-        dnf list "$pkg" >/dev/null 2>&1 && available=0
+        (dnf list "$pkg" >/dev/null 2>&1 || dnf provides "$pkg" >/dev/null 2>&1) && available=0
         ;;
       zypper)
         zypper info "$pkg" >/dev/null 2>&1 && available=0
