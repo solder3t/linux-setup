@@ -59,7 +59,13 @@ pkg_python() {
 pkg_java() {
   case "$PM" in
     pacman)       echo "jdk-openjdk" ;;
-    dnf)          echo "java-devel" ;;
+    dnf)
+      if (dnf list "java-latest-openjdk-devel" >/dev/null 2>&1 || dnf provides "java-latest-openjdk-devel" >/dev/null 2>&1); then
+        echo "java-latest-openjdk-devel"
+      else
+        echo "java-devel"
+      fi
+      ;;
     apt-get|nala) echo "default-jdk" ;;
     zypper)       echo "java-devel" ;;
     apk)          echo "openjdk21" ;;
