@@ -97,7 +97,7 @@ linux-setup/
 │   ├── packages.sh      # Package name mappings per PM
 │   ├── installers.sh    # Shared install utilities
 │   ├── plugin.sh        # Plugin loader & runner (with timing)
-│   └── ui.sh            # TUI (banner + whiptail selector)
+│   └── ui.sh            # TUI (banner + fzf interactive selector)
 ├── plugins/
 │   ├── android/         # ROM/kernel build deps (core, build, libs, java, python, tools)
 │   ├── bash/            # Bash config + Starship
@@ -110,7 +110,9 @@ linux-setup/
 │   ├── browsers/        # Chrome, Floorp
 │   ├── fonts/           # MesloLGS Nerd Font
 │   ├── ide/             # VS Code, Android Studio, Antigravity
-│   └── bootloader/      # GRUB themes
+│   ├── bootloader/      # GRUB themes
+│   ├── system-setup/    # System configuration & repositories (CachyOS, DNF, RPM Fusion, fstrim, snapd, timeshift, Samba/SSH, cleanup)
+│   └── system-utils/    # CLI system monitoring utilities (fastfetch, htop, ncdu, duf, gping, procs)
 ├── bash/                # Bash dotfiles & Starship config
 └── zsh/                 # Zsh dotfiles & P10k config
 ```
