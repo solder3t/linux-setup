@@ -58,13 +58,13 @@ pkg_python() {
 
 pkg_java() {
   case "$PM" in
-    pacman)       echo "jdk21-openjdk" ;;
-    dnf)          echo "java-21-openjdk-devel" ;;
-    apt-get|nala) echo "openjdk-21-jdk" ;;
-    zypper)       echo "java-21-openjdk-devel" ;;
+    pacman)       echo "jdk-openjdk" ;;
+    dnf)          echo "java-devel" ;;
+    apt-get|nala) echo "default-jdk" ;;
+    zypper)       echo "java-devel" ;;
     apk)          echo "openjdk21" ;;
     xbps-install) echo "openjdk21" ;;
-    eopkg)        echo "openjdk-21" ;;
+    eopkg)        echo "openjdk" ;;
     *)            printf "%b\n" "${YELLOW}⚠ pkg_java: unknown PM '$PM'${RC}" >&2 ;;
   esac
 }

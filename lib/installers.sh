@@ -6,6 +6,48 @@
 
 : "${PM:?PM not set — detect.sh must be sourced first}"
 
+# ── Filter Available Packages ───────────────────────────────────
+
+filter_available_packages() {
+  local filtered=""
+  for pkg in "$@"; do
+    local available=1
+    case "$PM" in
+      pacman)
+        pacman -Si "$pkg" >/dev/null 2>&1 && available=0
+        ;;
+      apt-get|nala)
+        apt-cache show "$pkg" >/dev/null 2>&1 && available=0
+        ;;
+      dnf)
+        dnf list "$pkg" >/dev/null 2>&1 && available=0
+        ;;
+      zypper)
+        zypper info "$pkg" >/dev/null 2>&1 && available=0
+        ;;
+      apk)
+        apk info -e "$pkg" >/dev/null 2>&1 && available=0
+        ;;
+      xbps-install)
+        xbps-query -R "$pkg" >/dev/null 2>&1 && available=0
+        ;;
+      eopkg)
+        eopkg info "$pkg" >/dev/null 2>&1 && available=0
+        ;;
+      *)
+        available=0
+        ;;
+    esac
+
+    if [[ $available -eq 0 ]]; then
+      filtered+="$pkg "
+    else
+      printf "%b\n" "${YELLOW}⚠ Package '$pkg' is not available in repository, skipping...${RC}" >&2
+    fi
+  done
+  echo "$filtered"
+}
+
 # ── Generic Package Installer ───────────────────────────────────
 
 install_packages() {
@@ -18,18 +60,27 @@ install_packages() {
     return
   }
 
+  local filtered_packages
+  filtered_packages=$(filter_available_packages $packages)
+
+  if [[ -z "${filtered_packages//[[:space:]]/}" ]]; then
+    printf "%b\n" "${YELLOW}⚠ No packages in group '${state_key}' are available to install.${RC}"
+    mark_done "$state_key"
+    return 0
+  fi
+
   printf "%b\n" "${CYAN}📦 Installing packages for '${state_key}'${RC}"
 
   case "$PM" in
     pacman)
-      if "$ESCALATION_TOOL" "$PM" -Sy --needed --noconfirm $packages; then
+      if "$ESCALATION_TOOL" "$PM" -Sy --needed --noconfirm $filtered_packages; then
         printf "%b\n" "${GREEN}✅ Installed via pacman${RC}"
       else
         printf "%b\n" "${YELLOW}⚠ Some packages failed with pacman${RC}"
         setup_aur_helper
         if [[ -n "${AUR_HELPER:-}" ]]; then
           printf "%b\n" "${YELLOW}🔄 Retrying with $AUR_HELPER...${RC}"
-          "$AUR_HELPER" -Sy --needed --noconfirm $packages
+          "$AUR_HELPER" -Sy --needed --noconfirm $filtered_packages
         else
           printf "%b\n" "${RED}✖ Failed and no AUR helper available${RC}"
           return 1
@@ -37,28 +88,28 @@ install_packages() {
       fi
       ;;
     nala)
-      "$ESCALATION_TOOL" nala install -y $packages
+      "$ESCALATION_TOOL" nala install -y $filtered_packages
       ;;
     apt-get)
       "$ESCALATION_TOOL" apt-get update
-      "$ESCALATION_TOOL" apt-get install -y --no-install-recommends $packages
+      "$ESCALATION_TOOL" apt-get install -y --no-install-recommends $filtered_packages
       ;;
     dnf)
       "$ESCALATION_TOOL" dnf install -y --setopt=install_weak_deps=False \
-        --skip-unavailable $packages
+        --skip-unavailable $filtered_packages
       ;;
     zypper)
       "$ESCALATION_TOOL" zypper refresh
-      "$ESCALATION_TOOL" zypper --non-interactive install $packages
+      "$ESCALATION_TOOL" zypper --non-interactive install $filtered_packages
       ;;
     apk)
-      "$ESCALATION_TOOL" apk add $packages
+      "$ESCALATION_TOOL" apk add $filtered_packages
       ;;
     xbps-install)
-      "$ESCALATION_TOOL" xbps-install -Sy $packages
+      "$ESCALATION_TOOL" xbps-install -Sy $filtered_packages
       ;;
     eopkg)
-      "$ESCALATION_TOOL" eopkg install -y $packages
+      "$ESCALATION_TOOL" eopkg install -y $filtered_packages
       ;;
     *)
       printf "%b\n" "${RED}✖ Unsupported package manager: $PM${RC}"

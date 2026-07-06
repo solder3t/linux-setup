@@ -5,7 +5,11 @@ plugin_install() {
     $ESCALATION_TOOL mkdir -p /etc/apt/keyrings
     curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | \
       $ESCALATION_TOOL gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg
-    echo "deb [arch=arm64 signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/antigravity-debian main" | \
+    local deb_arch="amd64"
+    if [[ "$ARCH" == "aarch64" ]]; then
+      deb_arch="arm64"
+    fi
+    echo "deb [arch=${deb_arch} signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/antigravity-debian main" | \
       $ESCALATION_TOOL tee /etc/apt/sources.list.d/antigravity.list > /dev/null
     $ESCALATION_TOOL apt-get update
     $ESCALATION_TOOL apt-get install -y antigravity

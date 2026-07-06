@@ -79,6 +79,7 @@ declare -A CATEGORY_DISPLAY=(
   ["Aur-helpers"]="AUR Helpers"
   ["Misc"]="Miscellaneous"
   ["General"]="Shell & System"
+  ["System-setup"]="System Setup"
 )
 
 get_category_display() {
@@ -151,3 +152,47 @@ run_default_profile() {
   IFS=' ' read -ra defaults <<< "${LINUX_SETUP_DEFAULT_PLUGINS:-integrations zsh ccache clang android}"
   run_selected_plugins install "${defaults[@]}"
 }
+
+# ── Find Plugin Path ────────────────────────────────────────────
+
+find_plugin_path() {
+  local target_name="$1"
+  for plugin in "${PLUGINS_LOADED[@]}"; do
+    local p_name
+    p_name="$(basename "$(dirname "$plugin")")"
+    if [[ "$p_name" == "$target_name" ]]; then
+      echo "$plugin"
+      return 0
+    fi
+  done
+  return 1
+}
+
+# ── Installation Status Checking ────────────────────────────────
+
+is_plugin_installed() {
+  local p_name="$1"
+  local plugin_path="$2"
+
+  # Source the plugin in a subshell to see if it defines a custom check
+  (
+    source "$plugin_path" 2>/dev/null
+    if declare -f plugin_installed >/dev/null 2>&1; then
+      plugin_installed
+      return $?
+    fi
+  )
+
+  # Default heuristic checks based on plugin name
+  case "$p_name" in
+    neovim)              command_exists nvim ;;
+    ripgrep)             command_exists rg ;;
+    vscode)              command_exists code ;;
+    chrome)              command_exists google-chrome-stable || command_exists google-chrome ;;
+    meslo-nerd-font)     if command -v fc-list >/dev/null 2>&1; then fc-list 2>/dev/null | grep -qi "Meslo"; else return 1; fi ;;
+    grub-wuthering)      [[ -d /boot/grub/themes/Wuthering || -d /boot/grub2/themes/Wuthering ]] ;;
+    chaotic-aur)         [[ -f /etc/pacman.d/chaotic-mirrorlist ]] ;;
+    *)                   command_exists "$p_name" ;;
+  esac
+}
+
