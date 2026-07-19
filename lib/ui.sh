@@ -66,6 +66,9 @@ ui_select_plugins() {
   done
 
   # Build item list for fzf
+  local uninstalled_items=()
+  local installed_items=()
+
   for plugin in "${PLUGINS_LOADED[@]}"; do
     local p_dir p_name c_dir dir_cat
     p_dir="$(dirname "$plugin")"
@@ -85,8 +88,10 @@ ui_select_plugins() {
     [[ "$dir_cat" != "IDE" ]] && dir_cat="${dir_cat^}"
 
     local status="[${DIM}-${RC}]"
+    local is_installed=false
     if is_plugin_installed "$p_name" "$plugin"; then
       status="[${GREEN}✔${RC}]"
+      is_installed=true
     fi
 
     local category
@@ -105,6 +110,22 @@ ui_select_plugins() {
 
     local item="${status} ${name_str} ${cat_str} - ${desc}"
     
+    # Store in respective array with category appended for later routing
+    if [[ "$is_installed" == "true" ]]; then
+      installed_items+=("${item}|${dir_cat}")
+    else
+      uninstalled_items+=("${item}|${dir_cat}")
+    fi
+  done
+
+  # Process uninstalled items first, then installed items
+  local all_items=("${uninstalled_items[@]}" "${installed_items[@]}")
+
+  for entry in "${all_items[@]}"; do
+    # Extract item and dir_cat by splitting on the last pipe character
+    local item="${entry%|*}"
+    local dir_cat="${entry##*|}"
+
     # Write to all list
     printf "%b\n" "$item" >> "$tmpdir/all"
 
@@ -144,14 +165,14 @@ ui_select_plugins() {
     "-m"
     "--ansi"
     "--layout=reverse"
-    "--border"
+    "--border=rounded"
     "--info=inline"
     "--prompt=⚡ All Plugins > "
     "--header=Tabs: F1:All | F2:🤖Android | F3:🐚System | F4:💻IDE/Editor | F5:🛠️DevTools | F6:📂Files | F7:🌐Web/Term | F8:🎨Design
-Keys: TAB:Toggle | CTRL-A:Select All | CTRL-D:Deselect All | CTRL-P:Toggle Preview | ENTER:Proceed"
-    "--bind=f1:reload(cat '$tmpdir/all')+clear-query+change-prompt(⚡ All Plugins > ),f2:reload(cat '$tmpdir/android')+clear-query+change-prompt(🤖 Android > ),f3:reload(cat '$tmpdir/system')+clear-query+change-prompt(🐚 System > ),f4:reload(cat '$tmpdir/ide')+clear-query+change-prompt(💻 IDE/Editor > ),f5:reload(cat '$tmpdir/devtools')+clear-query+change-prompt(🛠️ DevTools > ),f6:reload(cat '$tmpdir/files')+clear-query+change-prompt(📂 Files > ),f7:reload(cat '$tmpdir/webterm')+clear-query+change-prompt(🌐 Web/Term > ),f8:reload(cat '$tmpdir/design')+clear-query+change-prompt(🎨 Design > ),ctrl-a:select-all,ctrl-d:deselect-all,ctrl-p:toggle-preview"
+Keys: TAB:Toggle | CTRL-A:Select All | CTRL-D:Deselect All | CTRL-P:Toggle Preview | ALT-U:Uninstalled | ALT-I:Installed"
+    "--bind=f1:reload(cat '$tmpdir/all')+clear-query+change-prompt(⚡ All Plugins > ),f2:reload(cat '$tmpdir/android')+clear-query+change-prompt(🤖 Android > ),f3:reload(cat '$tmpdir/system')+clear-query+change-prompt(🐚 System > ),f4:reload(cat '$tmpdir/ide')+clear-query+change-prompt(💻 IDE/Editor > ),f5:reload(cat '$tmpdir/devtools')+clear-query+change-prompt(🛠️ DevTools > ),f6:reload(cat '$tmpdir/files')+clear-query+change-prompt(📂 Files > ),f7:reload(cat '$tmpdir/webterm')+clear-query+change-prompt(🌐 Web/Term > ),f8:reload(cat '$tmpdir/design')+clear-query+change-prompt(🎨 Design > ),ctrl-a:select-all,ctrl-d:deselect-all,ctrl-p:toggle-preview,alt-u:change-query([-]),alt-i:change-query([✔])"
     "--preview='$ROOT_DIR/install.sh' --preview {2}"
-    "--preview-window=right:55%:border-left"
+    "--preview-window=right:55%:border-left:wrap"
     $fzf_colors
   )
 
