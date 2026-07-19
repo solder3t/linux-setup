@@ -75,9 +75,9 @@ ui_select_plugins() {
       fi
     fi
 
-    local status="[-]"
+    local status="[${DIM}-${RC}]"
     if is_plugin_installed "$p_name" "$plugin"; then
-      status="[✔]"
+      status="[${GREEN}✔${RC}]"
     fi
 
     local category
@@ -86,9 +86,15 @@ ui_select_plugins() {
     local desc
     desc="$(get_plugin_description "$plugin" "$p_name")"
 
-    # Align columns: State (4 chars), Name (20 chars), Category (25 chars), Description
-    local item
-    item=$(printf "%-4s %-20s %-25s - %s" "$status" "$p_name" "($category)" "$desc")
+    # Align columns using pre-padded strings to avoid ANSI length issues in printf
+    local name_str
+    name_str=$(printf "%-20s" "$p_name")
+
+    local cat_padded
+    cat_padded=$(printf "%-25s" "($category)")
+    local cat_str="${CYAN}${cat_padded}${RC}"
+
+    local item="${status} ${name_str} ${cat_str} - ${desc}"
     list_items+=("$item")
   done
 
@@ -102,8 +108,8 @@ ui_select_plugins() {
     "--border"
     "--info=inline"
     "--prompt=⚡ Select Plugins > "
-    "--header=$'Type to search/filter | TAB: Toggle selection | ENTER: Proceed to install | ESC: Quit\n '"
-    "--preview=\"$ROOT_DIR/install.sh --preview {2}\""
+    "--header=Type to search/filter | TAB: Toggle selection | ENTER: Proceed to install | ESC: Quit"
+    "--preview='$ROOT_DIR/install.sh' --preview {2}"
     "--preview-window=right:55%:border-left"
     $fzf_colors
   )
