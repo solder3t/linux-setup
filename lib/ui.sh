@@ -55,8 +55,17 @@ ui_select_plugins() {
     return 1
   fi
 
+  # Create a secure temp directory for tab-separated item lists
+  local tmpdir
+  tmpdir=$(mktemp -d)
+  
+  # Pre-create files for each tab to avoid file-not-found errors
+  local tab
+  for tab in all android system ide devtools files webterm design; do
+    touch "$tmpdir/$tab"
+  done
+
   # Build item list for fzf
-  local -a list_items=()
   for plugin in "${PLUGINS_LOADED[@]}"; do
     local p_dir p_name c_dir dir_cat
     p_dir="$(dirname "$plugin")"
@@ -64,16 +73,16 @@ ui_select_plugins() {
     c_dir="$(dirname "$p_dir")"
     dir_cat="$(basename "$c_dir")"
 
-    [[ "$dir_cat" == "plugins" ]] && dir_cat="General"
-    [[ "${dir_cat,,}" == "ide" ]] && dir_cat="IDE"
-    [[ "$dir_cat" != "IDE" ]] && dir_cat="${dir_cat^}"
-
     # Skip unsupported plugins unless --show-unsupported is set
     if ! is_plugin_supported "$plugin"; then
       if [[ "${SHOW_UNSUPPORTED:-}" != "true" ]]; then
         continue
       fi
     fi
+
+    [[ "$dir_cat" == "plugins" ]] && dir_cat="General"
+    [[ "${dir_cat,,}" == "ide" ]] && dir_cat="IDE"
+    [[ "$dir_cat" != "IDE" ]] && dir_cat="${dir_cat^}"
 
     local status="[${DIM}-${RC}]"
     if is_plugin_installed "$p_name" "$plugin"; then
@@ -95,7 +104,37 @@ ui_select_plugins() {
     local cat_str="${CYAN}${cat_padded}${RC}"
 
     local item="${status} ${name_str} ${cat_str} - ${desc}"
-    list_items+=("$item")
+    
+    # Write to all list
+    printf "%b\n" "$item" >> "$tmpdir/all"
+
+    # Route to category-specific files
+    case "$dir_cat" in
+      Android)
+        printf "%b\n" "$item" >> "$tmpdir/android"
+        ;;
+      Bash|Zsh|General|System-utils|System-setup|Aur-helpers)
+        printf "%b\n" "$item" >> "$tmpdir/system"
+        ;;
+      Editors|IDE)
+        printf "%b\n" "$item" >> "$tmpdir/ide"
+        ;;
+      Developer-tools|Ccache|Clang)
+        printf "%b\n" "$item" >> "$tmpdir/devtools"
+        ;;
+      File-utils)
+        printf "%b\n" "$item" >> "$tmpdir/files"
+        ;;
+      Browsers|Terminals)
+        printf "%b\n" "$item" >> "$tmpdir/webterm"
+        ;;
+      Fonts|Bootloader)
+        printf "%b\n" "$item" >> "$tmpdir/design"
+        ;;
+      *)
+        printf "%b\n" "$item" >> "$tmpdir/system"
+        ;;
+    esac
   done
 
   # Run fzf with custom theme and settings
@@ -110,14 +149,20 @@ ui_select_plugins() {
     "--prompt=⚡ Select Plugins > "
     "--header=Tabs: F1:All | F2:🤖Android | F3:🐚System | F4:💻IDE/Editor | F5:🛠️DevTools | F6:📂Files | F7:🌐Web/Term | F8:🎨Design
 Instructions: Type to filter | TAB: Toggle selection | ENTER: Proceed | ESC: Quit"
-    "--bind=f1:change-query(),f2:change-query(Android),f3:change-query(System),f4:change-query(IDE | Editor),f5:change-query(Tools),f6:change-query(File),f7:change-query(Browser | Terminal),f8:change-query(Appearance)"
+    "--bind=f1:reload(cat '$tmpdir/all')+clear-query,f2:reload(cat '$tmpdir/android')+clear-query,f3:reload(cat '$tmpdir/system')+clear-query,f4:reload(cat '$tmpdir/ide')+clear-query,f5:reload(cat '$tmpdir/devtools')+clear-query,f6:reload(cat '$tmpdir/files')+clear-query,f7:reload(cat '$tmpdir/webterm')+clear-query,f8:reload(cat '$tmpdir/design')+clear-query"
     "--preview='$ROOT_DIR/install.sh' --preview {2}"
     "--preview-window=right:55%:border-left"
     $fzf_colors
   )
 
   local selections
-  selections=$(printf "%b\n" "${list_items[@]}" | fzf "${fzf_opts[@]}") || return 1
+  selections=$(cat "$tmpdir/all" | fzf "${fzf_opts[@]}") || {
+    rm -rf "$tmpdir"
+    return 1
+  }
+
+  # Clean up temp directory
+  rm -rf "$tmpdir"
 
   # Extract selected plugin names
   local final_list=""
