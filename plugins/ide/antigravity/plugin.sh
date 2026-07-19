@@ -1,40 +1,97 @@
-plugin_describe() { echo "antigravity - Google Antigravity repo (x86_64)"; }
+plugin_describe() { echo "antigravity - Google Antigravity IDE and Agent (v2.0)"; }
+
+_antigravity_choose() {
+  local prompt="$1"; shift
+  local options=("$@")
+  local choice
+  echo >&2
+  echo "$prompt" >&2
+  select choice in "${options[@]}"; do
+    [[ -n "$choice" ]] && echo "$choice" && return
+    echo "Invalid choice, try again." >&2
+  done
+}
+
 plugin_install() {
-  if [[ "$PM" == "apt-get" || "$PM" == "nala" ]]; then
-    echo "📦 Installing Antigravity for Debian/Ubuntu..."
-    $ESCALATION_TOOL mkdir -p /etc/apt/keyrings
-    curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | \
-      $ESCALATION_TOOL gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg
-    local deb_arch="amd64"
-    if [[ "$ARCH" == "aarch64" ]]; then
-      deb_arch="arm64"
-    fi
-    echo "deb [arch=${deb_arch} signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/antigravity-debian main" | \
-      $ESCALATION_TOOL tee /etc/apt/sources.list.d/antigravity.list > /dev/null
-    $ESCALATION_TOOL apt-get update
-    $ESCALATION_TOOL apt-get install -y antigravity
-  elif [[ "$PM" == "dnf" ]]; then
-    echo "📦 Installing Antigravity for Fedora..."
-    $ESCALATION_TOOL tee /etc/yum.repos.d/antigravity.repo > /dev/null << EOL
-[antigravity-rpm]
-name=Antigravity RPM Repository
-baseurl=https://us-central1-yum.pkg.dev/projects/antigravity-auto-updater-dev/antigravity-rpm
-enabled=1
-gpgcheck=0
-exclude=*.i686
-EOL
-    $ESCALATION_TOOL dnf makecache
-    $ESCALATION_TOOL dnf install -y antigravity
-  elif [[ "$PM" == "pacman" ]]; then
-    echo "📦 Installing Antigravity for Arch Linux (AUR)..."
-    setup_aur_helper
-    if [[ -n "$AUR_HELPER" ]]; then
-      $AUR_HELPER -S --needed --noconfirm antigravity
-    else
-      echo "❌ AUR helper required for Antigravity on Arch."
-      exit 1
-    fi
-  else
-    echo "⚠️ Antigravity installation not yet supported for $PM"
+  local mode="both"
+  
+  if [[ "$SKIP_CONFIRMATION" != "true" && -t 0 && -t 1 ]]; then
+    echo -e "\n${BOLD}Antigravity 2.0 Installation Options:${RC}"
+    local options=("Antigravity 2.0 Agent (Background Hub)" "Antigravity 2.0 IDE (Standalone IDE)" "Both (Agent & IDE)")
+    local choice
+    choice=$(_antigravity_choose "Select component to install:" "${options[@]}")
+    
+    case "$choice" in
+      "Antigravity 2.0 Agent (Background Hub)")
+        mode="agent"
+        ;;
+      "Antigravity 2.0 IDE (Standalone IDE)")
+        mode="ide"
+        ;;
+      "Both (Agent & IDE)")
+        mode="both"
+        ;;
+    esac
   fi
+
+  printf "%b\n" "${CYAN}📦 Installing Antigravity 2.0 ($mode) via one-liner...${RC}"
+  
+  if [[ "$mode" == "agent" || "$mode" == "both" ]]; then
+    printf "%b\n" "${CYAN}Installing Antigravity 2.0 Agent...${RC}"
+    bash <(curl -fsSL https://raw.githubusercontent.com/jssroberto/antigravity-2-fedora-installer/main/install.sh) --mode agent -y
+  fi
+
+  if [[ "$mode" == "ide" || "$mode" == "both" ]]; then
+    printf "%b\n" "${CYAN}Installing Antigravity 2.0 IDE...${RC}"
+    bash <(curl -fsSL https://raw.githubusercontent.com/jssroberto/antigravity-2-fedora-installer/main/install.sh) --mode ide -y
+  fi
+}
+
+plugin_uninstall() {
+  local mode="both"
+
+  # Detect what is installed to prompt intelligently if interactive
+  local has_agent=0
+  local has_ide=0
+  command_exists antigravity && has_agent=1
+  command_exists antigravity-ide && has_ide=1
+
+  if [[ $has_agent -eq 1 && $has_ide -eq 1 ]]; then
+    if [[ "$SKIP_CONFIRMATION" != "true" && -t 0 && -t 1 ]]; then
+      echo -e "\n${BOLD}Antigravity 2.0 Uninstallation Options:${RC}"
+      local options=("Uninstall Antigravity 2.0 Agent only" "Uninstall Antigravity 2.0 IDE only" "Uninstall Both (Agent & IDE)")
+      local choice
+      choice=$(_antigravity_choose "Select component to uninstall:" "${options[@]}")
+
+      case "$choice" in
+        "Uninstall Antigravity 2.0 Agent only")
+          mode="agent"
+          ;;
+        "Uninstall Antigravity 2.0 IDE only")
+          mode="ide"
+          ;;
+        "Uninstall Both (Agent & IDE)")
+          mode="both"
+          ;;
+      esac
+    fi
+  elif [[ $has_agent -eq 1 ]]; then
+    mode="agent"
+  elif [[ $has_ide -eq 1 ]]; then
+    mode="ide"
+  fi
+
+  printf "%b\n" "${CYAN}🗑 Uninstalling Antigravity 2.0 ($mode) via one-liner...${RC}"
+
+  if [[ "$mode" == "agent" ]]; then
+    bash <(curl -fsSL https://raw.githubusercontent.com/jssroberto/antigravity-2-fedora-installer/main/uninstall.sh) --agent < /dev/null
+  elif [[ "$mode" == "ide" ]]; then
+    bash <(curl -fsSL https://raw.githubusercontent.com/jssroberto/antigravity-2-fedora-installer/main/uninstall.sh) --ide < /dev/null
+  else
+    bash <(curl -fsSL https://raw.githubusercontent.com/jssroberto/antigravity-2-fedora-installer/main/uninstall.sh) --both < /dev/null
+  fi
+}
+
+plugin_installed() {
+  command_exists antigravity || command_exists antigravity-ide
 }
