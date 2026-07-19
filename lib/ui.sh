@@ -108,7 +108,9 @@ ui_select_plugins() {
     "--border"
     "--info=inline"
     "--prompt=⚡ Select Plugins > "
-    "--header=Type to search/filter | TAB: Toggle selection | ENTER: Proceed to install | ESC: Quit"
+    "--header=Tabs: F1:All | F2:🤖Android | F3:🐚System | F4:💻IDE/Editor | F5:🛠️DevTools | F6:📂Files | F7:🌐Web/Term | F8:🎨Design
+Instructions: Type to filter | TAB: Toggle selection | ENTER: Proceed | ESC: Quit"
+    "--bind=f1:change-query(),f2:change-query(Android),f3:change-query(System),f4:change-query(IDE | Editor),f5:change-query(Tools),f6:change-query(File),f7:change-query(Browser | Terminal),f8:change-query(Appearance)"
     "--preview='$ROOT_DIR/install.sh' --preview {2}"
     "--preview-window=right:55%:border-left"
     $fzf_colors
