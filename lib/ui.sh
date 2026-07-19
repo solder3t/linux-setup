@@ -146,10 +146,10 @@ ui_select_plugins() {
     "--layout=reverse"
     "--border"
     "--info=inline"
-    "--prompt=⚡ Select Plugins > "
+    "--prompt=⚡ All Plugins > "
     "--header=Tabs: F1:All | F2:🤖Android | F3:🐚System | F4:💻IDE/Editor | F5:🛠️DevTools | F6:📂Files | F7:🌐Web/Term | F8:🎨Design
-Instructions: Type to filter | TAB: Toggle selection | ENTER: Proceed | ESC: Quit"
-    "--bind=f1:reload(cat '$tmpdir/all')+clear-query,f2:reload(cat '$tmpdir/android')+clear-query,f3:reload(cat '$tmpdir/system')+clear-query,f4:reload(cat '$tmpdir/ide')+clear-query,f5:reload(cat '$tmpdir/devtools')+clear-query,f6:reload(cat '$tmpdir/files')+clear-query,f7:reload(cat '$tmpdir/webterm')+clear-query,f8:reload(cat '$tmpdir/design')+clear-query"
+Keys: TAB:Toggle | CTRL-A:Select All | CTRL-D:Deselect All | CTRL-P:Toggle Preview | ENTER:Proceed"
+    "--bind=f1:reload(cat '$tmpdir/all')+clear-query+change-prompt(⚡ All Plugins > ),f2:reload(cat '$tmpdir/android')+clear-query+change-prompt(🤖 Android > ),f3:reload(cat '$tmpdir/system')+clear-query+change-prompt(🐚 System > ),f4:reload(cat '$tmpdir/ide')+clear-query+change-prompt(💻 IDE/Editor > ),f5:reload(cat '$tmpdir/devtools')+clear-query+change-prompt(🛠️ DevTools > ),f6:reload(cat '$tmpdir/files')+clear-query+change-prompt(📂 Files > ),f7:reload(cat '$tmpdir/webterm')+clear-query+change-prompt(🌐 Web/Term > ),f8:reload(cat '$tmpdir/design')+clear-query+change-prompt(🎨 Design > ),ctrl-a:select-all,ctrl-d:deselect-all,ctrl-p:toggle-preview"
     "--preview='$ROOT_DIR/install.sh' --preview {2}"
     "--preview-window=right:55%:border-left"
     $fzf_colors

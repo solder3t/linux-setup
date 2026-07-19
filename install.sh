@@ -78,7 +78,7 @@ show_preview() {
   printf "%b\n" "${YELLOW}${BOLD}SOURCE CODE (${plugin_path}):${RC}"
   
   if command_exists bat; then
-    bat --style=plain --color=always "$plugin_path"
+    bat --language=bash --style=numbers,snip --color=always "$plugin_path"
   else
     cat "$plugin_path"
   fi
