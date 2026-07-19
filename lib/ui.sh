@@ -115,7 +115,7 @@ ui_select_plugins() {
   )
 
   local selections
-  selections=$(printf "%s\n" "${list_items[@]}" | fzf "${fzf_opts[@]}") || return 1
+  selections=$(printf "%b\n" "${list_items[@]}" | fzf "${fzf_opts[@]}") || return 1
 
   # Extract selected plugin names
   local final_list=""
