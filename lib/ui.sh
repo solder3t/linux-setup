@@ -102,7 +102,7 @@ ui_select_plugins() {
     "--border"
     "--info=inline"
     "--prompt=⚡ Select Plugins > "
-    "--header=$'TAB: Toggle selection | ENTER: Proceed to install | CTRL-C/ESC: Quit\n '"
+    "--header=$'Type to search/filter | TAB: Toggle selection | ENTER: Proceed to install | ESC: Quit\n '"
     "--preview=\"$ROOT_DIR/install.sh --preview {2}\""
     "--preview-window=right:55%:border-left"
     $fzf_colors
