@@ -41,35 +41,43 @@ window-theme = ghostty
 window-decoration = server
 
 # --- Transparency and Blur ---
-background-opacity = 0.8
-background-blur = 25
+background-opacity = 0.85
+background-blur = 40
 
 # --- Colors & Theme ---
 background = #000000
-foreground = #ffffff
-selection-background = #1a1a2e
-selection-foreground = #b2bec3
+foreground = #dddddd
+selection-background = #b5d5ff
+selection-foreground = #000000
 bold-color = bright
 
-palette = 0=#282c34
-palette = 1=#e06c75
-palette = 2=#98c379
-palette = 3=#e5c07b
-palette = 4=#61afef
-palette = 5=#c678dd
-palette = 6=#56b6c2
-palette = 7=#abb2bf
-palette = 8=#5c6370
-palette = 9=#ff7b86
-palette = 10=#b5e890
-palette = 11=#ffd479
-palette = 12=#7fc8ff
-palette = 13=#d19cff
-palette = 14=#74dbe8
+# Black
+palette = 0=#000000
+palette = 8=#767676
+# Red
+palette = 1=#cc0403
+palette = 9=#f2201f
+# Green
+palette = 2=#19cb00
+palette = 10=#23fd00
+# Yellow
+palette = 3=#cecb00
+palette = 11=#fffd00
+# Blue
+palette = 4=#0d73cc
+palette = 12=#1a8fcf
+# Magenta
+palette = 5=#cb1ed1
+palette = 13=#fd28ff
+# Cyan
+palette = 6=#0dcdcd
+palette = 14=#14ffff
+# White
+palette = 7=#dddddd
 palette = 15=#ffffff
 
 # --- Font ---
-font-family = "MesloLGL Nerd Font"
+font-family = "MesloLGS NF"
 font-size = 12
 
 # --- Clipboard ---
@@ -118,3 +126,8 @@ font-feature = +calt,+liga
 # --- Updates ---
 auto-update = download
 auto-update-channel = stable
+
+# Custom shaders
+# https://github.com/hackrmomo/ghostty-shaders
+# https://github.com/KroneCorylus/shader-playground
+# https://github.com/sahaj-b/ghostty-cursor-shaders

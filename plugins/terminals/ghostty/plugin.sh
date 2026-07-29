@@ -55,9 +55,8 @@ plugin_install() {
   fi
 
   # ── Install Config ──
-  local PLUGIN_DIR
-  PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  local CONFIG_SRC="$PLUGIN_DIR/config"
+  local CONFIG_DIR="$ROOT_DIR/configs/ghostty"
+  local CONFIG_SRC="$CONFIG_DIR/config"
 
   if [[ -f "$CONFIG_SRC" ]]; then
     printf "%b\n" "${CYAN}📝 Installing ghostty config${RC}"
@@ -72,9 +71,9 @@ plugin_install() {
     cp "$CONFIG_SRC" "$HOME/.config/ghostty/config"
   fi
 
-  if [[ -d "$PLUGIN_DIR/shaders" ]]; then
+  if [[ -d "$CONFIG_DIR/shaders" ]]; then
     printf "%b\n" "  🎨 Installing ghostty shaders..."
     mkdir -p "$HOME/.config/ghostty/shaders"
-    cp -r "$PLUGIN_DIR/shaders/"* "$HOME/.config/ghostty/shaders/"
+    cp -r "$CONFIG_DIR/shaders/"* "$HOME/.config/ghostty/shaders/"
   fi
 }

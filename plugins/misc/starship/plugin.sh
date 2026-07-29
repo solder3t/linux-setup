@@ -51,8 +51,11 @@ plugin_install() {
         ;;
   esac
   
-  # Note: User needs to add `eval "$(starship init zsh)"` to .zshrc
-  # We can optionally append it if we want to force it, but p10k is already there.
-  # Better to let user switch if they want, or just print a message.
+  if [[ -f "$ROOT_DIR/configs/starship/starship.toml" ]]; then
+    printf "%b\n" "${CYAN}🚀 Installing Starship configuration...${RC}"
+    mkdir -p "$HOME/.config"
+    cp "$ROOT_DIR/configs/starship/starship.toml" "$HOME/.config/starship.toml"
+  fi
+
   echo "ℹ️ To use starship, allow it to init in your shell config (e.g., append 'eval \"\$(starship init zsh)\"' to ~/.zshrc)"
 }

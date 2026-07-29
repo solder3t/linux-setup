@@ -57,17 +57,17 @@ plugin_install() {
       printf "%b\n" "  📦 Backing up existing .zshrc"
       cp "$HOME/.zshrc" "$HOME/.zshrc.installer-backup"
     fi
-    cp "$ROOT_DIR/zsh/.zshrc" "$HOME/.zshrc"
+    cp "$ROOT_DIR/configs/zsh/.zshrc" "$HOME/.zshrc"
   else
     printf "%b\n" "${DIM}  ⏭ .zshrc already managed by installer${RC}"
   fi
 
   # p10k config
-  if [[ -f "$ROOT_DIR/zsh/.p10k.zsh" ]]; then
+  if [[ -f "$ROOT_DIR/configs/zsh/.p10k.zsh" ]]; then
     if [[ ! -f "$HOME/.p10k.zsh.installer-backup" && -f "$HOME/.p10k.zsh" ]]; then
        cp "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.installer-backup"
     fi
-    cp "$ROOT_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
+    cp "$ROOT_DIR/configs/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
   fi
 
   # ── Set default shell ──

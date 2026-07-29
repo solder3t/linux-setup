@@ -13,8 +13,7 @@ plugin_install() {
   fi
 
   # Install Config
-  PLUGIN_DIR="$(dirname "$plugin")"
-  CONFIG_SRC="$PLUGIN_DIR/kitty.conf"
+  CONFIG_SRC="$ROOT_DIR/configs/kitty/kitty.conf"
   
   if [[ -f "$CONFIG_SRC" ]]; then
       echo "📝 Installing kitty config"

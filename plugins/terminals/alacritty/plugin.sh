@@ -25,8 +25,7 @@ plugin_install() {
   fi
 
   # Install Config
-  PLUGIN_DIR="$(dirname "$plugin")"
-  CONFIG_SRC="$PLUGIN_DIR/alacritty.toml"
+  CONFIG_SRC="$ROOT_DIR/configs/alacritty/alacritty.toml"
   
   if [[ -f "$CONFIG_SRC" ]]; then
       echo "📝 Installing alacritty config"

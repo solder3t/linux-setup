@@ -30,15 +30,12 @@ plugin_install() {
   echo "🔧 Configuring fastfetch..."
   mkdir -p "$HOME/.config/fastfetch"
 
-  local PLUGIN_DIR
-  PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  local CONFIG_DIR="$ROOT_DIR/configs/fastfetch"
 
-  if [[ -f "$PLUGIN_DIR/config.jsonc" ]]; then
-      # Copy all configs and subfolders (ascii, images, presets), then remove the plugin script itself
-      cp -r "$PLUGIN_DIR/"* "$HOME/.config/fastfetch/"
-      rm -f "$HOME/.config/fastfetch/plugin.sh"
+  if [[ -f "$CONFIG_DIR/config.jsonc" ]]; then
+      cp -r "$CONFIG_DIR/"* "$HOME/.config/fastfetch/"
       echo "✅ fastfetch configuration installed."
   else
-      echo "⚠️ Could not find config.jsonc in $PLUGIN_DIR to install."
+      echo "⚠️ Could not find config.jsonc in $CONFIG_DIR to install."
   fi
 }
