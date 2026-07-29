@@ -12,34 +12,36 @@
 
 | Distribution | Package Manager | Tested |
 |---|---|---|
-| **Arch Linux** | `pacman` + AUR (`yay`/`paru`) | ✅ Arch|
-| **Fedora** | `dnf` | ✅ Fedora 43|
-| **Ubuntu / Debian** | `apt-get` / `nala` | ✅ 22.04 / 24.04 / 25.10|
+| **Arch Linux** | `pacman` + AUR (`yay`/`paru`) | ✅ Arch |
+| **Fedora** | `dnf` | ✅ Fedora 43 |
+| **Ubuntu / Debian** | `apt-get` / `nala` | ✅ 22.04 / 24.04 / 25.10 |
 
 > Privilege escalation automatically detects `sudo`.
 
 ## ✨ Features
 
-- 🔮 **Interactive TUI** — Search, filter, and preview plugin scripts before installing using a rich `fzf`-based interface with checkbox status and live source preview.
-- 🧩 **Plugin Architecture** — 57 self-contained plugins across 14 categories
-- 🔍 **Smart Detection** — Auto-detects distro, architecture, package manager, escalation tool, init system
-- 🛡️ **Package Resilience** — Dynamically filters and skips missing/unavailable repository packages to prevent installer crashes
-- 🏗️ **Chaotic AUR** — One-click setup for Arch-based distros
-- 🛠️ **System Setup & Maintenance** — Ported `linutil` configurations (CachyOS Repos, DNF Tuning, RPM Fusion, Multimedia Codecs, SSD TRIM, Snapd removal, Timeshift, Samba/SSH, system cleanup)
-- 📦 Complete Android **ROM + kernel** build dependencies
-- ⚙️ **Java JDK** (distro-agnostic version resolution), Clang/LLVM/LLD, GNU cross-compilers
-- 🧠 Google's official **repo** tool
-- 🚀 **AOSP clang prebuilts**
-- ⚡ **ccache preconfigured (50 GB)**
-- 🔧 **ulimit tuning** for Soong & Ninja
-- 🔌 **adb / fastboot + udev rules**
-- 🐚 **ZSH + Oh-My-Zsh + Powerlevel10k + fastfetch**
-- 🚀 **Modern CLI Tools**:
-  - **Editors**: Neovim
-  - **Terminals**: Ghostty (w/ Config), Alacritty (w/ Config), Kitty (w/ Config)
+- 🔮 **Interactive TUI** — Rich `fzf`-based interface with category tabs (`F1`–`F8`), dynamic prompt headers, state filters (`Alt-U` / `Alt-I`), select/deselect all (`Ctrl-A` / `Ctrl-D`), toggleable preview pane (`Ctrl-P`), and syntax-highlighted source previews.
+- 📁 **Centralized Configurations (`configs/`)** — Clean top-level configuration architecture storing dotfiles and app configs for Bash, Zsh, Starship, Ghostty (with shaders), Kitty, Alacritty, Fastfetch, Cava, and Fish.
+- 🧩 **Plugin Architecture** — Self-contained plugins across 14 categories.
+- 🔍 **Smart Detection** — Auto-detects distro, architecture, package manager, escalation tool, init system.
+- 🛡️ **Package Resilience** — Dynamically filters and skips missing/unavailable repository packages to prevent installer crashes.
+- 🏗️ **Chaotic AUR** — One-click setup for Arch-based distros.
+- 🛠️ **System Setup & Maintenance** — Ported `linutil` configurations (CachyOS Repos, DNF Tuning, RPM Fusion, Multimedia Codecs, SSD TRIM, Snapd removal, Timeshift, Samba/SSH, system cleanup).
+- 📦 Complete Android **ROM + kernel** build dependencies.
+- ⚙️ **Java JDK** (distro-agnostic version resolution), Clang/LLVM/LLD, GNU cross-compilers.
+- 🧠 Google's official **repo** tool.
+- 🚀 **AOSP clang prebuilts**.
+- ⚡ **ccache preconfigured (50 GB)**.
+- 🔧 **ulimit tuning** for Soong & Ninja.
+- 🔌 **adb / fastboot + udev rules**.
+- 🐚 **ZSH + Oh-My-Zsh + Powerlevel10k** & **Starship Cross-Shell Prompt**.
+- 🌐 **Browsers**: Chrome, Zen Browser (via COPR, AUR & Flathub).
+- 💻 **IDEs & Editors**: VS Code (official repos), Android Studio, Antigravity 2.0, Neovim.
+- 📺 **Terminals**: Ghostty (with GLSL cursor tail shaders), Alacritty, Kitty (with cursor trail configs).
+- 🚀 **Modern CLI & Utility Tools**:
   - **Utils**: fzf, ripgrep, bat, zoxide, tldr, btop/htop, tmux
-  - **Productivity**: lazygit, delta, fd, ncdu, jq, eza, yazi, direnv, duf
-- 🔁 **Idempotent & resumable** (safe to re-run anytime)
+  - **Productivity**: lazygit, delta, fd, ncdu, jq, eza, yazi, direnv, duf, fastfetch
+- 🔁 **Idempotent & resumable** (safe to re-run anytime).
 
 ## 🚀 Quick Start
 
@@ -56,11 +58,11 @@ git clone https://github.com/solder3t/linux-setup.git
 cd linux-setup
 chmod +x install.sh
 
-# Interactive TUI mode (fuzzy search, preview code with fzf)
+# Interactive TUI mode (category tabs, fuzzy search, preview code with fzf)
 ./install.sh
 
 # Direct installation (headless mode)
-./install.sh install android zsh
+./install.sh install android zsh starship zen-browser
 
 # List all available plugins, description, and host compatibility in a neat table
 ./install.sh list
@@ -69,7 +71,7 @@ chmod +x install.sh
 ./install.sh -y -c my_config.json
 
 # Uninstall specific plugins
-./install.sh uninstall chrome floop
+./install.sh uninstall chrome zen-browser
 ```
 
 ### JSON Configuration Format
@@ -80,6 +82,7 @@ You can automate installations by creating a `config.json` file:
 {
   "auto_execute": [
     "zsh",
+    "starship",
     "fastfetch",
     "neovim"
   ],
@@ -87,36 +90,45 @@ You can automate installations by creating a `config.json` file:
 }
 ```
 
-
 ## 🏗️ Architecture
 
 ```
 linux-setup/
 ├── install.sh           # Entry point (bootstrap + CLI)
+├── configs/             # Centralized dotfiles & app configurations
+│   ├── alacritty/       # Alacritty config
+│   ├── bash/            # .bashrc config
+│   ├── cava/            # Cava audio visualizer config & shaders
+│   ├── fastfetch/       # Fastfetch config, presets, assets & images
+│   ├── fish/            # Fish shell configs & completions
+│   ├── ghostty/         # Ghostty config & GLSL shaders (cursor tail)
+│   ├── kitty/           # Kitty config (cursor trail animation)
+│   ├── starship/        # Starship prompt configuration (starship.toml)
+│   └── zsh/             # .zshrc and .p10k.zsh
 ├── lib/
 │   ├── detect.sh        # Environment detection (distro, PM, arch, escalation)
 │   ├── state.sh         # Idempotent state management
 │   ├── packages.sh      # Package name mappings per PM
 │   ├── installers.sh    # Shared install utilities
 │   ├── plugin.sh        # Plugin loader & runner (with timing)
-│   └── ui.sh            # TUI (banner + fzf interactive selector)
+│   └── ui.sh            # TUI (banner + tabbed fzf interactive selector)
 ├── plugins/
 │   ├── android/         # ROM/kernel build deps (core, build, libs, java, python, tools)
-│   ├── bash/            # Bash config + Starship
+│   ├── aur-helpers/     # yay, paru, chaotic-aur
+│   ├── bash/            # Bash configuration plugin
 │   ├── zsh/             # Zsh + OMZ + P10k
 │   ├── ccache/          # CCache + ulimits
 │   ├── clang/           # AOSP Clang prebuilts
-│   ├── tools/           # 25+ CLI tools (bat, fzf, ripgrep, lazygit, chaotic-aur, ...)
+│   ├── developer-tools/ # lazygit, delta, direnv, glow, httpie, jq, tldr, tmux
 │   ├── editors/         # Neovim
-│   ├── terminals/       # Alacritty, Kitty (with configs)
-│   ├── browsers/        # Chrome, Floorp
+│   ├── terminals/       # Ghostty, Alacritty, Kitty
+│   ├── browsers/        # Chrome, Zen Browser
+│   ├── file-utils/      # bat, eza, fd, fzf, ripgrep, yazi, zoxide
 │   ├── fonts/           # MesloLGS Nerd Font
-│   ├── ide/             # VS Code, Android Studio, Antigravity
+│   ├── ide/             # VS Code, Android Studio, Antigravity 2.0
 │   ├── bootloader/      # GRUB themes
 │   ├── system-setup/    # System configuration & repositories (CachyOS, DNF, RPM Fusion, fstrim, snapd, timeshift, Samba/SSH, cleanup)
 │   └── system-utils/    # CLI system monitoring utilities (fastfetch, htop, ncdu, duf, gping, procs)
-├── bash/                # Bash dotfiles & Starship config
-└── zsh/                 # Zsh dotfiles & P10k config
 ```
 
 Each plugin is a self-contained `plugin.sh` with `plugin_describe()` and `plugin_install()` hooks.
