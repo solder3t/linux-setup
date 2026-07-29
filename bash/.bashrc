@@ -123,13 +123,14 @@ fzf_complete() {
 }
 bind -x '"\C-]": fzf_complete'
 
-# Zoxide (with cd replacement)
-if command -v zoxide >/dev/null; then
-    eval "$(zoxide init bash --cmd cd)"
-fi
 
 # Starship (Must be at end)
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 if command -v starship >/dev/null; then
     eval "$(starship init bash)"
+fi
+
+# Zoxide (with cd replacement)
+if command -v zoxide >/dev/null; then
+    eval "$(zoxide init bash --cmd cd)"
 fi
