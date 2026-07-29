@@ -80,6 +80,10 @@ clipboard-write = allow
 cursor-style = underline
 mouse-hide-while-typing = true
 
+# Cursor Trail Animation
+custom-shader = shaders/cursor_tail.glsl
+custom-shader-animation = always
+
 # --- Keybindings ---
 # Copy/Paste Binds
 keybind = ctrl+shift+c=copy_to_clipboard

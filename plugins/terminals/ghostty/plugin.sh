@@ -71,4 +71,10 @@ plugin_install() {
 
     cp "$CONFIG_SRC" "$HOME/.config/ghostty/config"
   fi
+
+  if [[ -d "$PLUGIN_DIR/shaders" ]]; then
+    printf "%b\n" "  🎨 Installing ghostty shaders..."
+    mkdir -p "$HOME/.config/ghostty/shaders"
+    cp -r "$PLUGIN_DIR/shaders/"* "$HOME/.config/ghostty/shaders/"
+  fi
 }
