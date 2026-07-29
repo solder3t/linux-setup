@@ -1,12 +1,6 @@
-plugin_describe() { echo "shell - Bash shell configuration + Starship prompt"; }
+plugin_describe() { echo "bash - Bash shell configuration"; }
 
 plugin_install() {
-  # ── Install Starship ──
-  if ! command_exists starship; then
-    printf "%b\n" "${CYAN}📦 Installing Starship prompt...${RC}"
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
-  fi
-
   # ── Install Bash config ──
   printf "%b\n" "${CYAN}🐚 Installing Bash config...${RC}"
   mkdir -p "$HOME/.linux-setup"
